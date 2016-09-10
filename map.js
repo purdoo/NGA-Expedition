@@ -69,7 +69,7 @@ jQuery.noConflict();
       return houseObj;
     }
 
-    var censusObjArr = [];
+    var censusObjDictionary = {};
     var censusUrl = 'https://data.cityofchicago.org/api/views/kn9c-c2s2/rows.xml?accessType=DOWNLOAD'
     $.get(censusUrl, {
       // wait for the callback
@@ -79,10 +79,10 @@ jQuery.noConflict();
         var entry = $(this);
         var censusObj = parseCensus(entry);
         //TODO : addHousingMarker(housingObj);
-        censusObjArr.push(censusObj);
+        censusObjDictionary[censusObj.communityAreaNumber] = censusObj
         
       });
-      console.log(censusObjArr);
+      console.log(censusObjDictionary);
     });
 
     // create obj from raw census data xml
