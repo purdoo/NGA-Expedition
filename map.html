@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css"
       href="https://js.api.here.com/v3/3.0/mapsjs-ui.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="map.js"></script>
+    
     <script type="text/javascript" charset="UTF-8"
       src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
     <script type="text/javascript" charset="UTF-8"
@@ -14,28 +14,12 @@
       src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
     <script type="text/javascript" charset="UTF-8"
       src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+      <script src="map.js"></script>
   </head> 
   <body>
   <div style="width: 100%; height: 100%" id="mapContainer"></div>
   <script>
-    // Initialize the platform object:
-    var platform = new H.service.Platform({
-    'app_id': 'aCeuaXJdZyeWBAGkjTTY',
-    'app_code': 'NS_9MlRT5hnHMHXx_qo01g'
-    });
 
-    // Obtain the default map types from the platform object
-    var maptypes = platform.createDefaultLayers();
-
-    // Instantiate (and display) a map object:
-    var map = new H.Map(
-    document.getElementById('mapContainer'),
-    maptypes.normal.map,
-    {
-      zoom: 11,
-      center: { lng: -87.6405556, lat: 41.8822222 }
-    });
-    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
   </script>
   </body>
 </html>
