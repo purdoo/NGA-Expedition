@@ -104,7 +104,7 @@ jQuery.noConflict();
     /* Drawing Functions */
 
     var addHousingMarker = function(obj) {
-      console.log(obj.lat);
+      //console.log(obj.lat);
       if(obj.lat != '') {
         var size = new H.math.Size(40,40);
         var markerIcon = new H.map.Icon('img/marker.png',{size:size});
