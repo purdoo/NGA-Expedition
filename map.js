@@ -37,6 +37,8 @@ jQuery.noConflict();
     // housing layer/group
     var housingGroup = new H.map.Group();
     map.addObject(housingGroup);
+    var districtGroup = new H.map.Group();
+    map.addObject(districtGroup);
 
     var housingObjArr = [];
     var url = 'https://data.cityofchicago.org/api/views/s6ha-ppgi/rows.xml?accessType=DOWNLOAD'
@@ -137,14 +139,26 @@ jQuery.noConflict();
       $('#mapSidebar').toggle(true);
       shapesUrl = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?additionaldata=IncludeShapeLevel%2Cdistrict&gen=8&jsonattributes=1&language=en-US&maxresults=20&mode=retrieveAddresses&prox=41.89023%2C-87.64104%2C100&app_id=aCeuaXJdZyeWBAGkjTTY&app_code=NS_9MlRT5hnHMHXx_qo01g';
       $.get(shapesUrl, {}).done( function (obj) {
-        console.log(obj);
-        var rawShapeData = obj.response.view[0].result[0].location.shape.value;
-        console.log(shape);
         var polystrip = new H.geo.Strip();
-        
-        //polystrip.pushPoint();        
-                
-        //map.addObject(shape);
+        var rawShapeData = obj.response.view[0].result[0].location.shape.value;
+        var shapeData = rawShapeData.replace('POLYGON ((', '').replace('))','');
+        //console.log(shapeData);
+        var shapeDataArr = shapeData.split(',');
+        for(var i = 0; i < shapeDataArr.length; i++) {
+          var shapeSplit = shapeDataArr[i].trim().split(' ');
+          //polystrip.pushLatLngAlt(parseFloat(shapeSplit[0]),parseFloat(shapeSplit[1]), 0);
+          polystrip.pushLatLngAlt(parseFloat(shapeSplit[1]),parseFloat(shapeSplit[0]), 0);
+          //console.log(shapeSplit);
+          //console.log(parseFloat(shapeSplit[0]));
+          //var shapePt = H.geo.Point(parseFloat(shapeSplit[0]),parseFloat(shapeSplit[1]));
+          //polystrip.pushPoint(shapePt);
+        }
+        console.log('done creating shape object');
+        var polygon = new H.map.Polygon(polystrip, {style: {
+					strokeColor: "#f00",
+					lineWidth: 10
+				}});      
+        districtGroup.addObject(polygon);        
       });
       //console.log(event.getData());
       var housingInfo = event.target.getData()
