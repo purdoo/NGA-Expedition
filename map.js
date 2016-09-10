@@ -69,7 +69,37 @@ jQuery.noConflict();
       return houseObj;
     }
 
+    var censusObjArr = [];
+    var censusUrl = 'https://data.cityofchicago.org/api/views/kn9c-c2s2/rows.xml?accessType=DOWNLOAD'
+    $.get(censusUrl, {
+      // wait for the callback
+    }).done( function (xml) {
+      //console.log(xml);
+      $(xml).find('row').each(function() {
+        var entry = $(this);
+        var censusObj = parseCensus(entry);
+        //TODO : addHousingMarker(housingObj);
+        censusObjArr.push(censusObj);
+        
+      });
+      console.log(censusObjArr);
+    });
 
+    // create obj from raw census data xml
+    var parseCensus = function(entry) {
+      censusObj = {}
+      censusObj.communityArea = entry.find('community_area_name').text();
+      censusObj.communityAreaNumber = entry.find('ca').text();
+      censusObj.percentHousingCrowded = entry.find('percent_of_housing_crowded').text();
+      censusObj.percentHouseholdsBelowPoverty = entry.find('percent_households_below_poverty').text();
+      censusObj.percentAged16Unemployed = entry.find('percent_aged_16_unemployed').text();
+      censusObj.percentAged25NoDiploma = entry.find('percent_aged_25_without_high_school_diploma').text();
+      censusObj.percentAgedUnder18orOver64 = entry.find('percent_aged_under_18_or_over_64').text();
+      censusObj.perCapitaIncome = entry.find('per_capita_income_').text();
+      censusObj.hardshipIndex = entry.find('hardship_index').text();
+      
+      return censusObj;
+    }
 
     /* Drawing Functions */
 
