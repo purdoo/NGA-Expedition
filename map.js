@@ -21,6 +21,9 @@ jQuery.noConflict();
     });
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     
+    // housing layer/group
+    var housingGroup = new H.map.Group();
+    map.addObject(housingGroup);
 
     var housingObjArr = [];
     var url = 'https://data.cityofchicago.org/api/views/s6ha-ppgi/rows.xml?accessType=DOWNLOAD'
@@ -57,19 +60,21 @@ jQuery.noConflict();
     }
 
     /* Drawing Functions */
-   
+
     var addHousingMarker = function(obj) {
       //41.9133256466
       //-87.7103171384
       console.log(obj.lat);
       if(obj.lat != '') {
-        var size = new H.math.Size(10,10);
-        var markerIcon = new H.map.Icon('img/marker.png',);
-        var coords = {lat: parseInt(obj.lat), lng: parseInt(obj.lon), size},
-        //var coords = {lat: parseInt(obj.lat), lng: parseInt(obj.lon)}
+        var size = new H.math.Size(40,40);
+        var markerIcon = new H.map.Icon('img/marker.png',{size:size});
+        var coords = {lat: parseFloat(obj.lat), lng: parseFloat(obj.lon)},
+        //var coords = {lat: 41.9133256466, lng: -87.7103171384};
         marker = new H.map.Marker(coords, {icon: markerIcon});
         // Add the marker to the map and 
-        map.addObject(marker);
+        //map.addObject(marker);
+        
+        housingGroup.addObject(marker);
       }
     }
 
