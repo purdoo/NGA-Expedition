@@ -19,6 +19,16 @@ jQuery.noConflict();
       zoom: 11,
       center: { lng: -87.6405556, lat: 41.8822222 }
     });
+
+    /* Map Event Handlers */
+    /*
+    map.addEventListener('tap', function(evt) {
+      console.log(evt);
+      console.log(evt.type, evt.currentPointer.type);
+
+    });
+    */    
+
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     
     // housing layer/group
@@ -59,6 +69,8 @@ jQuery.noConflict();
       return houseObj;
     }
 
+
+
     /* Drawing Functions */
 
     var addHousingMarker = function(obj) {
@@ -70,14 +82,18 @@ jQuery.noConflict();
         var markerIcon = new H.map.Icon('img/marker.png',{size:size});
         var coords = {lat: parseFloat(obj.lat), lng: parseFloat(obj.lon)},
         //var coords = {lat: 41.9133256466, lng: -87.7103171384};
-        marker = new H.map.Marker(coords, {icon: markerIcon});
+        marker = new H.map.Marker(coords, {icon: markerIcon, data:'test-data'});
+        marker.addEventListener('tap', housingMarkerOnClick);
         // Add the marker to the map and 
-        //map.addObject(marker);
         
         housingGroup.addObject(marker);
       }
     }
 
+    var housingMarkerOnClick = function(event) {
+      console.log(event.target.getData());
+      //console.log(event.getData());
+    }
   }); // end document load
 
 })(jQuery);
