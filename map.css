@@ -1,0 +1,14 @@
+container {
+  position : relative;
+}
+
+#mapContainer {
+  position : absolute;
+}
+
+#sidebar {
+  position : absolute;
+  top : 0;
+  right : 0;
+}
+

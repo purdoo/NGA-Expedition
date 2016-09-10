@@ -48,7 +48,7 @@ jQuery.noConflict();
         housingObjArr.push(housingObj);
         
       });
-      console.log(housingObjArr);
+      //console.log(housingObjArr);
     });
 
     // create obj from raw housing xml
@@ -104,15 +104,13 @@ jQuery.noConflict();
     /* Drawing Functions */
 
     var addHousingMarker = function(obj) {
-      //41.9133256466
-      //-87.7103171384
       console.log(obj.lat);
       if(obj.lat != '') {
         var size = new H.math.Size(40,40);
         var markerIcon = new H.map.Icon('img/marker.png',{size:size});
         var coords = {lat: parseFloat(obj.lat), lng: parseFloat(obj.lon)},
         //var coords = {lat: 41.9133256466, lng: -87.7103171384};
-        marker = new H.map.Marker(coords, {icon: markerIcon, data:'test-data'});
+        marker = new H.map.Marker(coords, {icon: markerIcon, data:obj});
         marker.addEventListener('tap', housingMarkerOnClick);
         // Add the marker to the map and 
         
