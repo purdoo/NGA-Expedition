@@ -119,7 +119,20 @@ jQuery.noConflict();
     }
 
     var housingMarkerOnClick = function(event) {
-      console.log(event.target.getData());
+      var data = event.target.getData();
+      $('#mapSidebar').html('');
+      console.log(data);
+      var dataHtml = '<div id="sidebar-info">';
+      dataHtml += '<div id="name"><h3>' + data.propertyName + '</h3></div>';
+      dataHtml += '<div id="address">Address: ' + data.address + '</div>';
+      dataHtml += '<div id="area">Community Area: ' + data.communityArea + '</div>';      
+      dataHtml += '<div id="type">Housing Type: ' + data.propertyType + '</div>';
+
+      dataHtml += '';
+      dataHtml += '</div>';
+      $('#mapSidebar').html(dataHtml);
+      $('#mapSidebar').toggle(true);
+
       //console.log(event.getData());
     }
   }); // end document load
