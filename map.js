@@ -82,7 +82,7 @@ jQuery.noConflict();
         censusObjDictionary[censusObj.communityAreaNumber] = censusObj
         
       });
-      console.log(censusObjDictionary);
+      //console.log(censusObjDictionary);
     });
 
     // create obj from raw census data xml
@@ -119,6 +119,7 @@ jQuery.noConflict();
     }
 
     var housingMarkerOnClick = function(event) {
+<<<<<<< HEAD
       var data = event.target.getData();
       $('#mapSidebar').html('');
       console.log(data);
@@ -134,6 +135,13 @@ jQuery.noConflict();
       $('#mapSidebar').toggle(true);
 
       //console.log(event.getData());
+=======
+      var housingInfo = event.target.getData()
+      console.log(housingInfo);
+      var economicInfo = censusObjDictionary[housingInfo.communityAreaNumber]
+      console.log(economicInfo)
+      
+>>>>>>> f4e1aaf955c9d9a3b10b5ef3d29b08f4e77f2175
     }
   }); // end document load
 
