@@ -82,7 +82,7 @@ jQuery.noConflict();
         censusObjDictionary[censusObj.communityAreaNumber] = censusObj
         
       });
-      console.log(censusObjDictionary);
+      //console.log(censusObjDictionary);
     });
 
     // create obj from raw census data xml
@@ -119,8 +119,11 @@ jQuery.noConflict();
     }
 
     var housingMarkerOnClick = function(event) {
-      console.log(event.target.getData());
-      //console.log(event.getData());
+      var housingInfo = event.target.getData()
+      console.log(housingInfo);
+      var economicInfo = censusObjDictionary[housingInfo.communityAreaNumber]
+      console.log(economicInfo)
+      
     }
   }); // end document load
 
