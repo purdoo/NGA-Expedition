@@ -1,11 +1,14 @@
 jQuery.noConflict();
 (function ($) {
   $(document).ready(function ($) {
+    // globals
+    var appId = 'aCeuaXJdZyeWBAGkjTTY';
+    var appCode = 'NS_9MlRT5hnHMHXx_qo01g';
 
     // Initialize the platform object:
     var platform = new H.service.Platform({
-    'app_id': 'aCeuaXJdZyeWBAGkjTTY',
-    'app_code': 'NS_9MlRT5hnHMHXx_qo01g'
+    'app_id': appId,
+    'app_code': appCode
     });
 
     // Obtain the default map types from the platform object
@@ -111,9 +114,8 @@ jQuery.noConflict();
         var coords = {lat: parseFloat(obj.lat), lng: parseFloat(obj.lon)},
         //var coords = {lat: 41.9133256466, lng: -87.7103171384};
         marker = new H.map.Marker(coords, {icon: markerIcon, data:obj});
-        marker.addEventListener('tap', housingMarkerOnClick);
-        // Add the marker to the map and 
-        
+        marker.addEventListener('tap', housingMarkerOnClick); // onclick handler for markers
+        // Add the marker to the map
         housingGroup.addObject(marker);
       }
     }
@@ -130,9 +132,20 @@ jQuery.noConflict();
 
       dataHtml += '';
       dataHtml += '</div>';
+
       $('#mapSidebar').html(dataHtml);
       $('#mapSidebar').toggle(true);
-
+      shapesUrl = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?additionaldata=IncludeShapeLevel%2Cdistrict&gen=8&jsonattributes=1&language=en-US&maxresults=20&mode=retrieveAddresses&prox=41.89023%2C-87.64104%2C100&app_id=aCeuaXJdZyeWBAGkjTTY&app_code=NS_9MlRT5hnHMHXx_qo01g';
+      $.get(shapesUrl, {}).done( function (obj) {
+        console.log(obj);
+        var rawShapeData = obj.response.view[0].result[0].location.shape.value;
+        console.log(shape);
+        var polystrip = new H.geo.Strip();
+        
+        //polystrip.pushPoint();        
+                
+        //map.addObject(shape);
+      });
       //console.log(event.getData());
       var housingInfo = event.target.getData()
       console.log(housingInfo);
