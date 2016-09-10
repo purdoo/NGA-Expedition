@@ -137,28 +137,32 @@ jQuery.noConflict();
 
       $('#mapSidebar').html(dataHtml);
       $('#mapSidebar').toggle(true);
-      shapesUrl = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?additionaldata=IncludeShapeLevel%2Cdistrict&gen=8&jsonattributes=1&language=en-US&maxresults=20&mode=retrieveAddresses&prox=41.89023%2C-87.64104%2C100&app_id=aCeuaXJdZyeWBAGkjTTY&app_code=NS_9MlRT5hnHMHXx_qo01g';
+      shapesUrl = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?additionaldata=IncludeShapeLevel%2Cdistrict&gen=8&jsonattributes=1&language=en-US&maxresults=20&mode=retrieveAddresses&prox=' + data.lat + '%2C' + data.lon + '%2C100&app_id=' + appId + '&app_code='+appCode;
       $.get(shapesUrl, {}).done( function (obj) {
         var polystrip = new H.geo.Strip();
-        var rawShapeData = obj.response.view[0].result[0].location.shape.value;
-        var shapeData = rawShapeData.replace('POLYGON ((', '').replace('))','');
-        //console.log(shapeData);
-        var shapeDataArr = shapeData.split(',');
-        for(var i = 0; i < shapeDataArr.length; i++) {
-          var shapeSplit = shapeDataArr[i].trim().split(' ');
-          //polystrip.pushLatLngAlt(parseFloat(shapeSplit[0]),parseFloat(shapeSplit[1]), 0);
-          polystrip.pushLatLngAlt(parseFloat(shapeSplit[1]),parseFloat(shapeSplit[0]), 0);
-          //console.log(shapeSplit);
-          //console.log(parseFloat(shapeSplit[0]));
-          //var shapePt = H.geo.Point(parseFloat(shapeSplit[0]),parseFloat(shapeSplit[1]));
-          //polystrip.pushPoint(shapePt);
+        //if(obj)
+        console.log(obj.response);
+        if(typeof(obj.response.view[0].result[0].location.shape) !== 'undefined') {
+          var rawShapeData = obj.response.view[0].result[0].location.shape.value;
+          
+          var shapeData = rawShapeData.replace('POLYGON ((', '').replace('))','');
+          //console.log(shapeData);
+          var shapeDataArr = shapeData.split(',');
+          for(var i = 0; i < shapeDataArr.length; i++) {
+            var shapeSplit = shapeDataArr[i].trim().split(' ');
+            //polystrip.pushLatLngAlt(parseFloat(shapeSplit[0]),parseFloat(shapeSplit[1]), 0);
+            polystrip.pushLatLngAlt(parseFloat(shapeSplit[1]),parseFloat(shapeSplit[0]), 0);
+          }
+          console.log('done creating shape object');
+          var polygon = new H.map.Polygon(polystrip, {style: {
+            strokeColor: "#f00",
+            lineWidth: 5
+          }});      
+          districtGroup.addObject(polygon);
         }
-        console.log('done creating shape object');
-        var polygon = new H.map.Polygon(polystrip, {style: {
-					strokeColor: "#f00",
-					lineWidth: 10
-				}});      
-        districtGroup.addObject(polygon);        
+        else {
+          console.log('cannot get shape information');
+        }      
       });
       //console.log(event.getData());
       
