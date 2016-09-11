@@ -37,6 +37,24 @@ container {
   height: 600px;
 }
 
+/* Icons up in this bitch */
+
+/* Conditional positive/negative metric styling */
+div#percentHousingCrowded.metricLessThan {
+  color: green;
+}
+div#percentHousingCrowded.metricGreaterThan {
+  color: red;
+}
+
+div#percentHouseholdsBelowPoverty.metricLessThan {
+  color: green;
+}
+div#percentHouseholdsBelowPoverty.metricGreaterThan {
+  color: red;
+}
+
+
 /* Metric Classes */
 /*
 .metricLessThan {

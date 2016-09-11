@@ -31,7 +31,7 @@
       <div id="mapContainer"></div>
       <div id="mapSidebar" class="col col-md-4">
         <div id="mapButtons">
-          <h2>Generic Header</h2>
+          <h2>Chicago HotSpots</h2>
             <div class="btn-group btn-group-justified" role="group" style="padding-bottom: 20px;">
               <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default active" id="housing-button">Info</button>
