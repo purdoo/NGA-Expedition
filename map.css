@@ -37,6 +37,16 @@ container {
   height: 600px;
 }
 
+/* Metric Classes */
+/*
+.metricLessThan {
+  color: red;
+  font: bold;
+}
+.metricGreaterThan {
+  color: green;
+}*/
+
 /* Styling Buttons */
 .btn-group-justified>.btn-group .btn {
   width: 100%;
