@@ -184,6 +184,7 @@ jQuery.noConflict();
       var sumPerCapitaIncome = 0;
       var sumHardshipIndex =0;
 
+<<<<<<< HEAD
       for(var key in objDict) {
         if (objDict.hasOwnProperty(key)) {
           var caNumber = parseInt(key)
@@ -200,8 +201,7 @@ jQuery.noConflict();
           }
         }
       }
-      console.log(sumCensusObj);
-      console.log(sumPerCapitaIncome);
+
       aggCensusObj.avgPercentHousingCrowded = sumPercentHousingCrowded / sumCensusObj ;
       aggCensusObj.avgPercentHouseholdsBelowPoverty = sumPercentHouseholdsBelowPoverty / sumCensusObj ;
       aggCensusObj.avgPercentAged16Unemployed = sumPercentAged16Unemployed / sumCensusObj ;
