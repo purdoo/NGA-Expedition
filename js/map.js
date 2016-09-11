@@ -156,7 +156,7 @@ jQuery.noConflict();
       $('#routing-form-results').html('');
 
       // reverse isometric flow
-      geocode(String(clickedLat) + ',' + String(clickedLon));
+     // geocode(String(clickedLat) + ',' + String(clickedLon));
       //isolineTime = 4;
       //geocode(String(clickedLat) + ',' + String(clickedLon));
       //isolineTime = 10;
@@ -371,6 +371,11 @@ jQuery.noConflict();
     // get directions button mapping
     $('#get-directions').on('click', function(event) {
       mapRoute(currLon, currLat, clickedLon, clickedLat);
+    });
+
+    // reverse isoline call
+    $('#reverse-iso').on('click', function(event) {
+       geocode(String(clickedLat) + ',' + String(clickedLon));
     });
 
     // Aggregate Score Expand
