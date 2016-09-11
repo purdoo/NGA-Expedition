@@ -96,6 +96,7 @@ jQuery.noConflict();
 
     var housingMarkerOnClick = function(event) {
       var data = event.target.getData();
+      // sidebar html for housing info
       $('#mapSidebar').html('');
       console.log(data);
       var dataHtml = '<div id="sidebar-info">';
@@ -110,7 +111,10 @@ jQuery.noConflict();
       $('#mapSidebar').html(dataHtml);
       $('#mapSidebar').toggle(true);
 
-    
+      // routing logic
+      getRouting();
+
+      // shape drawing logic
       shapesUrl = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?additionaldata=IncludeShapeLevel%2Cdistrict&gen=8&jsonattributes=1&language=en-US&maxresults=20&mode=retrieveAddresses&prox=' + data.lat + '%2C' + data.lon + '%2C100&app_id=' + appId + '&app_code='+appCode;
       $.get(shapesUrl, {}).done( function (obj) {
         var polystrip = new H.geo.Strip();
@@ -130,7 +134,7 @@ jQuery.noConflict();
           var polygon = new H.map.Polygon(polystrip, {style: {
             strokeColor: "#f00",
             lineWidth: 5
-          }});      
+          }});
           districtGroup.addObject(polygon);
         }
         else {
