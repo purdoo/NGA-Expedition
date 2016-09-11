@@ -394,7 +394,7 @@ jQuery.noConflict();
       var localCrimeUrl = 'https://data.cityofchicago.org/resource/vwwp-7yr9.json';
       var crimeQueryPrefixClause = '?$where=within_circle(location,%20';
       var crimeQueryLatSuffix =   ',%20' ;
-      var crimeQueryLonSuffix = ',%202500)';
+      var crimeQueryLonSuffix = ',%201500)&$limit=400';
       var finalCrimeQueryUrl = localCrimeUrl + crimeQueryPrefixClause + lat + crimeQueryLatSuffix + lon + crimeQueryLonSuffix
 
       //console.log(finalCrimeQueryUrl);
@@ -403,7 +403,7 @@ jQuery.noConflict();
         var crimeScore = 400;
         console.log(obj.length);
         for(var i = 0; i < obj.length; i++) {
-          console.log(obj[i]);
+          //console.log(obj[i]);
           addCrimeMarker(obj[i].location.longitude, obj[i].location.latitude);
           //console.log(obj[i].primary_type);
           if(obj[i].primary_type == "HOMICIDE"){
@@ -437,6 +437,11 @@ jQuery.noConflict();
     // reverse isoline call
     $('#reverse-iso').on('click', function(event) {
        geocode(String(clickedLat) + ',' + String(clickedLon));
+    });
+
+    // clear crime layer
+    $('#clear-crimes').on('click', function(event) {
+       crimeGroup.removeAll();
     });
 
     // Aggregate Score Expand

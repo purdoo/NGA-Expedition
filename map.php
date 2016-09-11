@@ -48,6 +48,7 @@
           <div id="routing-form-nav">
             <button type="button" class="btn btn-default" id="get-directions">Get Directions</button>
             <button type="button" class="btn btn-default" id="reverse-iso">Reverse Iso</button>
+            <button type="button" class="btn btn-default" id="clear-crimes">Clear Crimes</button>
           </div>
           <div id="routing-form-results">
           </div>
@@ -60,5 +61,4 @@
     <script>
     </script>
   </body>
-
 </html>
