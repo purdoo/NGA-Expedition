@@ -10,7 +10,9 @@ function computeAggregateCensusMetrics(objDict) {
   var sumHardshipIndex =0;
 
   for(var key in objDict) {
-    if (objDict.hasOwnProperty(key)) {
+    if (objDict.hasOwnProperty(key) 
+          && Number.isInteger(parseInt(objDict[key].perCapitaIncome))
+          && Number.isInteger(parseInt(objDict[key].hardshipIndex))) {
         sumCensusObj += 1;
         sumPercentHousingCrowded = sumPercentHousingCrowded + parseFloat(objDict[key].percentHousingCrowded);
         sumPercentHouseholdsBelowPoverty = sumPercentHouseholdsBelowPoverty + parseFloat(objDict[key].percentHouseholdsBelowPoverty);
@@ -18,7 +20,7 @@ function computeAggregateCensusMetrics(objDict) {
         sumPercentAged25NoDiploma = sumPercentAged25NoDiploma + parseFloat(objDict[key].percentAged25NoDiploma);
         sumPercentAgedUnder18orOver64 = sumPercentAgedUnder18orOver64 + parseFloat(objDict[key].percentAgedUnder18orOver64);
         sumPerCapitaIncome = sumPerCapitaIncome + parseInt(objDict[key].perCapitaIncome);
-        sumHardshipIndex = sumHardshipIndex + parseInt(objDict[key].hardshipIndex);
+        sumHardshipIndex = sumHardshipIndex + parseInt(objDict[key].hardshipIndex,10);
     }
   }
 
