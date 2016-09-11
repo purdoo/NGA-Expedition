@@ -183,25 +183,34 @@ jQuery.noConflict();
         console.log(result);
         var strip = new H.geo.Strip(),
         shape = result.response.route[0].shape,
-        directions = result.response.route[0],
+        directions = result.response.route[0].leg[0].maneuver,
         i,
         l = shape.length;
 
+        // render the route shape
         for(i = 0; i < l; i++)
         {
           strip.pushLatLngAlt.apply(strip, shape[i].split(',').map(function(item) { return parseFloat(item); }));
         }
         var polyline = new H.map.Polyline(strip,
+        {
+          style:
           {
-            style:
-            {
-              lineWidth: 10,
-              strokeColor: "rgba(0, 128, 0, 0.7)"
-            }
-          });
-          routeGroup.removeAll();
-          routeGroup.addObject(polyline);
-          //map.setViewBounds(polyline.getBounds(), true);
+            lineWidth: 10,
+            strokeColor: "rgba(0, 128, 0, 0.7)"
+          }
+        });
+        routeGroup.removeAll();
+        routeGroup.addObject(polyline);
+        //map.setViewBounds(polyline.getBounds(), true);
+
+        // parse directions data and inject into DOM
+        var directionsHtml = '<h3>Directions</h3><hr>';
+        for(var i = 0; i < directions.length; i++) {
+          directionsHtml += '<div class="direction">' + directions[i].instruction + '<hr></div>';
+        }
+        //console.log(directionsHtml);
+        $('#routing-form-results').html(directionsHtml);
       },
       onError = function(error) { console.log(error);}
       router.calculateRoute(calculateRouteParams, onResult, onError);

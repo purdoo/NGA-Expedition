@@ -30,6 +30,10 @@ container {
   display:none;
 }
 
+#routing-form-results {
+  /*margin-top: 20px;*/
+}
+
 /* Styling Buttons */
 .btn-group-justified>.btn-group .btn {
   width: 100%;
