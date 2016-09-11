@@ -66,7 +66,7 @@ function tallyNScore(obj, aggObj) {
     var percentage = (((obj.perCapitaIncome - aggObj.avgPerCapitaIncome ) / aggObj.avgPerCapitaIncome));
     nScore += (40 * percentage);
 
-    console.log(nScore);
+    //console.log(nScore);
     return nScore;
 }
 

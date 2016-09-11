@@ -42,6 +42,8 @@ jQuery.noConflict();
     map.addObject(routeGroup);
     var shapegroup = new H.map.Group(); // for reverse isoline
     map.addObject(shapegroup);
+    var crimeGroup = new H.map.Group(); // for localized crimes
+    map.addObject(crimeGroup);
 
     var housingObjArr = [];
     var url = 'https://data.cityofchicago.org/api/views/s6ha-ppgi/rows.xml?accessType=DOWNLOAD'
@@ -77,9 +79,10 @@ jQuery.noConflict();
           } 
         } 
       });
-      console.log(censusAggregates);
+      //console.log(censusAggregates);
     });
 
+    /*
     var crimeArr = [];
     var crimeUrl = 'https://data.cityofchicago.org/resource/vwwp-7yr9.json';
     $.get(crimeUrl, {}).done( function (obj) {
@@ -88,7 +91,7 @@ jQuery.noConflict();
         //console.log(obj[i]);
       }
     });
-
+    */
 
     // add marker for housing object, embed geojson data into the map
     var addHousingMarker = function(obj) {
@@ -97,12 +100,21 @@ jQuery.noConflict();
         var size = new H.math.Size(40,40);
         var markerIcon = new H.map.Icon('img/marker.png',{size:size});
         var coords = {lat: parseFloat(obj.lat), lng: parseFloat(obj.lon)},
-        //var coords = {lat: 41.9133256466, lng: -87.7103171384};
         marker = new H.map.Marker(coords, {icon: markerIcon, data:obj});
         marker.addEventListener('tap', housingMarkerOnClick); // onclick handler for markers
         // Add the marker to the map
         housingGroup.addObject(marker);
       }
+    }
+
+    // add marker for crime object
+    var addCrimeMarker = function(lon,lat) {
+      var size = new H.math.Size(30,30);
+      var markerIcon = new H.map.Icon('img/marker-red.png',{size:size});
+      var coords = {lat: lat, lng: lon},
+      marker = new H.map.Marker(coords, {icon: markerIcon});
+      // Add the marker to the map
+      crimeGroup.addObject(marker);
     }
 
     var housingMarkerOnClick = function(event) {
@@ -376,36 +388,38 @@ jQuery.noConflict();
 
     var calculateCrimeScoreInRange = function(lat, lon)
     {
-      
+      // clear crime layer
+      crimeGroup.removeAll();
+      // build query string for url
       var localCrimeUrl = 'https://data.cityofchicago.org/resource/vwwp-7yr9.json';
       var crimeQueryPrefixClause = '?$where=within_circle(location,%20';
       var crimeQueryLatSuffix =   ',%20' ;
       var crimeQueryLonSuffix = ',%202500)';
       var finalCrimeQueryUrl = localCrimeUrl + crimeQueryPrefixClause + lat + crimeQueryLatSuffix + lon + crimeQueryLonSuffix
 
-      console.log(finalCrimeQueryUrl);
+      //console.log(finalCrimeQueryUrl);
       $.get(finalCrimeQueryUrl, {}).done( function (obj) {
         localCrimeArr = obj;
-        var crimeScore = 0;
+        var crimeScore = 400;
+        console.log(obj.length);
         for(var i = 0; i < obj.length; i++) {
-          //console.log(obj[i]);
-          //console.log(i);
+          console.log(obj[i]);
+          addCrimeMarker(obj[i].location.longitude, obj[i].location.latitude);
           //console.log(obj[i].primary_type);
           if(obj[i].primary_type == "HOMICIDE"){
-            crimeScore += 100;
+            crimeScore -= 0.95;
           } else if(obj[i].primary_type == "THEFT"){
-            crimeScore += 43;
+            crimeScore -= 0.45;
           } else if(obj[i].primary_type == "ROBBERY"){
-            crimeScore += 67;
+            crimeScore -= 0.65;
           } else if(obj[i].primary_type == "CRIMINAL DAMAGE"){
-            crimeScore += 41;
+            crimeScore -= 0.42;
           } else {
-            crimeScore += 22;
+            crimeScore -= 0.215;
           }
-
         }
-        console.log(crimeScore / 100);
-
+        //console.log(crimeScore);
+        return crimeScore;
       });
 
     
