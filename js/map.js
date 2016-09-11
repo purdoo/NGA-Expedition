@@ -442,8 +442,16 @@ jQuery.noConflict();
         scoreHtml += '<div id="agg-score-body"><h4>Neighborhood Score: ' + nScore.toFixed(2) + '</h4><h4>Crime Score: ' + cScore.toFixed(2) + '</h4><h4>Misc. Score: ' + eScore.toFixed(2) + '</h4></h3></div>';
         $('#score-summary').html(scoreHtml);
       
+        // build detail view for crime score
+        var detailHtml = '';
+        detailHtml += '<div><h3>Homicide Contrib: ' + homMod.toFixed(2) + '</h3></div><hr>';
+        detailHtml += '<div><h3>Theft Contrib: ' + theftMod.toFixed(2) + '</h3></div><hr>';
+        detailHtml += '<div><h3>Robbery Contrib: ' + robMod.toFixed(2) + '</h3></div><hr>';
+        detailHtml += '<div><h3>Property Damage Contrib: ' + damageMod.toFixed(2) + '</h3></div><hr>';
+        detailHtml += '<div><h3>Other Crimes: ' + otherMod.toFixed(2) + '</h3></div><hr>';
+
         // inject metrics into the metric page
-        $('#cScoreWell').html('<h3>Crime Score: ' + cScore.toFixed(2) + ' </h3><div class="well">' + '</div>');
+        $('#cScoreWell').html('<h3>Crime Score: ' + cScore.toFixed(2) + ' </h3><div class="well">' + detailHtml + '</div>');
         $('#eScoreWell').html('<h3>Misc. Score: ' + eScore.toFixed(2) + '</h3><div class="well">' + '</div>');
         //$('#metrics-form').html(metricsHtml);
 
