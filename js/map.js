@@ -110,7 +110,7 @@ jQuery.noConflict();
       clickedLon = data.lon;
       // sidebar html for housing info
       $('#housing-form').html('');
-      console.log(data);
+      //console.log(data);
       var dataHtml = '<div id="sidebar-info">';
       dataHtml += '<div id="name"><h3>' + data.propertyName + '</h3></div>';
       dataHtml += '<div id="address">Address: ' + data.address + '</div>';
@@ -121,11 +121,11 @@ jQuery.noConflict();
       dataHtml += '</div>';
       $('#housing-form').html(dataHtml);
       var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
-      console.log(metricsData);
+      //console.log(metricsData);
       $('#metrics-form').html(metricsData);
       $('#routing-form').toggle(false);
       $('#metrics-form').toggle(false);
-      
+
       $('#mapSidebar').toggle(true);
 
       // routing logic
@@ -133,17 +133,16 @@ jQuery.noConflict();
         navigator.geolocation.getCurrentPosition(markLocation, locationError);
       }
       else { alert("Browser does not support Geolocation."); }
-      mapRoute(currLon, currLat, data.lon, data.lat);
+      //mapRoute(currLon, currLat, data.lon, data.lat);
 
       // shape drawing logic
       shapesUrl = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?additionaldata=IncludeShapeLevel%2Cdistrict&gen=8&jsonattributes=1&language=en-US&maxresults=20&mode=retrieveAddresses&prox=' + data.lat + '%2C' + data.lon + '%2C100&app_id=' + appId + '&app_code='+appCode;
       $.get(shapesUrl, {}).done( function (obj) {
         var polystrip = new H.geo.Strip();
-        console.log(obj.response);
+        //console.log(obj.response);
         if(typeof(obj.response.view[0].result[0].location.shape) !== 'undefined') {
           // shape data is available, clear layer
           districtGroup.removeAll();
-
           var rawShapeData = obj.response.view[0].result[0].location.shape.value;
           var shapeData = rawShapeData.replace('POLYGON ((', '').replace('))','');
           var shapeDataArr = shapeData.split(',');
@@ -151,7 +150,7 @@ jQuery.noConflict();
             var shapeSplit = shapeDataArr[i].trim().split(' ');
             polystrip.pushLatLngAlt(parseFloat(shapeSplit[1]),parseFloat(shapeSplit[0]), 0);
           }
-          console.log('done creating shape object');
+          //console.log('done creating shape object');
           var polygon = new H.map.Polygon(polystrip, {style: {
             strokeColor: "#f00",
             lineWidth: 5
@@ -162,14 +161,9 @@ jQuery.noConflict();
           console.log('cannot get shape information');
         }      
       });
-      var housingInfo = event.target.getData()
-      console.log(housingInfo);
-      var economicInfo = censusObjDictionary[housingInfo.communityAreaNumber]
-      console.log(economicInfo)
-
     }
 
-    function mapRoute(startLon,startLat,endLon,endLat)
+    function mapRoute(startLon,startLat,endLon,endLat,travelOptions='')
     {
       var startParams = String(startLat) + ',' + String(startLon);
       var endParams = String(endLat) + ',' + String(endLon);
@@ -189,6 +183,7 @@ jQuery.noConflict();
         console.log(result);
         var strip = new H.geo.Strip(),
         shape = result.response.route[0].shape,
+        directions = result.response.route[0],
         i,
         l = shape.length;
 
@@ -204,7 +199,7 @@ jQuery.noConflict();
               strokeColor: "rgba(0, 128, 0, 0.7)"
             }
           });
-
+          routeGroup.removeAll();
           routeGroup.addObject(polyline);
           //map.setViewBounds(polyline.getBounds(), true);
       },
@@ -213,7 +208,7 @@ jQuery.noConflict();
     }
 
     function markLocation(location) {
-      console.log(location);
+      //console.log(location);
       var size = new H.math.Size(40,40);
       var markerIcon = new H.map.Icon('img/marker1.png',{size:size});
       currLat = location.coords.latitude;
@@ -222,11 +217,15 @@ jQuery.noConflict();
       marker = new H.map.Marker(coords, {icon: markerIcon});
       map.addObject(marker);
       // call route map function (eventually move to a button onclick event)
-      mapRoute(parseFloat(location.coords.longitude),parseFloat(location.coords.latitude),parseFloat(clickedLon),parseFloat(clickedLat));
+      //mapRoute(parseFloat(location.coords.longitude),parseFloat(location.coords.latitude),parseFloat(clickedLon),parseFloat(clickedLat));
     }
 
     function locationError(msg) { console.log(msg); }
 
+    // get directions button mapping
+    $('#get-directions').on('click', function(event) {
+      mapRoute(currLon, currLat, clickedLon, clickedLat);
+    });
 
     // stupid button onclick events have to be here
     $('#housing-button').on('click', function(event) {

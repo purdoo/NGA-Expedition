@@ -42,7 +42,13 @@
             <hr>
         </div>
         <div id="housing-form"></div>
-        <div id="routing-form"></div>
+        <div id="routing-form">
+          <div id="routing-form-nav">
+            <button type="button" class="btn btn-default" id="get-directions">Get Directions</button>
+          </div>
+          <div id="routing-form-results">
+          </div>
+        </div>
         <div id="metrics-form"></div>
       </div>
       <div class="close-button"><i class="fa fa-times"></i></div>
