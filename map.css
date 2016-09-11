@@ -25,6 +25,8 @@ container {
 
 #metrics-form {
   display:none;
+  height:600px;
+  overflow-y:auto;
 }
 
 #routing-form {
@@ -36,6 +38,80 @@ container {
   overflow-y: auto;
   height: 600px;
 }
+
+/* Direction Classes */
+.direction {
+  font-size: 120%;
+}
+
+/* Score Classes */
+#agg-score-header {
+  cursor:pointer;
+}
+
+#agg-score-body {
+  display:none;
+  padding-left:10px;
+}
+
+/* Conditional positive/negative metric styling */
+.metricEqual {
+  color: gray;
+}
+
+div#percentHousingCrowded.metricLessThan {
+  color: green;
+}
+div#percentHousingCrowded.metricGreaterThan {
+  color: red;
+}
+
+div#percentHouseholdsBelowPoverty.metricLessThan {
+  color: green;
+}
+div#percentHouseholdsBelowPoverty.metricGreaterThan {
+  color: red;
+}
+
+div#percentAged16Unemployed.metricLessThan {
+  color: green;
+}
+div#percentAged16Unemployed.metricGreaterThan {
+  color: red;
+}
+
+div#percentAged25NoDiploma.metricLessThan {
+  color: green;
+}
+div#percentAged25NoDiploma.metricGreaterThan {
+  color: red;
+}
+
+div#percentHouseholdsBelowPoverty.metricLessThan {
+  color: green;
+}
+div#percentHouseholdsBelowPoverty.metricGreaterThan {
+  color: red;
+}
+
+div#perCapitaIncome.metricLessThan {
+  color: red;
+}
+div#perCapitaIncome.metricGreaterThan {
+  color: green;
+}
+
+
+
+/* Metric Classes */
+/*
+.metricLessThan {
+  color: red;
+  font: bold;
+}
+.metricGreaterThan {
+  color: green;
+}*/
 
 /* Styling Buttons */
 .btn-group-justified>.btn-group .btn {

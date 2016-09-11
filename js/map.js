@@ -47,6 +47,8 @@ jQuery.noConflict();
     map.addObject(districtGroup);
     var routeGroup = new H.map.Group();
     map.addObject(routeGroup);
+    var shapegroup = new H.map.Group(); // for reverse isoline
+    map.addObject(shapegroup);
 
     var housingObjArr = [];
     var url = 'https://data.cityofchicago.org/api/views/s6ha-ppgi/rows.xml?accessType=DOWNLOAD'
@@ -86,9 +88,7 @@ jQuery.noConflict();
       console.log(censusAggregates);
     });
 
-
-    /* Drawing Functions */
-
+    // add marker for housing object, embed geojson data into the map
     var addHousingMarker = function(obj) {
       //console.log(obj.lat);
       if(obj.lat != '') {
@@ -110,19 +110,35 @@ jQuery.noConflict();
       clickedLon = data.lon;
       // sidebar html for housing info
       $('#housing-form').html('');
-      //console.log(data);
+      console.log(data);
       var dataHtml = '<div id="sidebar-info">';
       dataHtml += '<div id="name"><h3>' + data.propertyName + '</h3></div>';
       dataHtml += '<div id="address">Address: ' + data.address + '</div>';
       dataHtml += '<div id="area">Community Area: ' + data.communityArea + '</div>';      
       dataHtml += '<div id="type">Housing Type: ' + data.propertyType + '</div>';
+      dataHtml += '<div id="management">Management Company: ' + data.managementCompany + '</div>';
+      dataHtml += '<div id="phone">Phone Number: ' + data.phoneNumber + '</div>';
+      dataHtml += '<a>Zoom To</a>';
 
-      dataHtml += '';
-      dataHtml += '</div>';
-      $('#housing-form').html(dataHtml);
       var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
+      var nDev = tallyNScore(censusObjDictionary[data.communityAreaNumber], censusAggregates);
+      var nScore = 300 + nDev;
+      var cScore = 150.0;
+      var eScore = 25.0;
+      var aggScore = (nScore + cScore + eScore);
+      // aggregate score header
+      dataHtml += '<div id="agg-score-header"><h3>Aggregate Score: ' + aggScore.toFixed(2) + '</h3></div>';
+      // detailed score body
+      dataHtml += '<div id="agg-score-body"><h4>Neighborhood Score: ' + nScore.toFixed(2) + '</h4><h4>Crime Score: ' + cScore + '</h4><h4>Misc. Score: ' + eScore + '</h4></h3></div>';
+      dataHtml += '</div>';
+      
+      $('#housing-form').html(dataHtml);
+      
       //console.log(metricsData);
-      $('#metrics-form').html(metricsData);
+      var metricsHtml = '<h3>Area Score: ' + nScore.toFixed(2) + ' (Baseline: 300)</h3><div class="well">' + metricsData + '</div>';
+      metricsHtml += '<h3>Crime Score: ' + cScore.toFixed(2) + ' (Baseline: 400)</h3><div class="well">' + '</div>';
+      metricsHtml += '<h3>Misc. Score: ' + eScore.toFixed(2) + '</h3><div class="well">' + '</div>';
+      $('#metrics-form').html(metricsHtml);
       // basically forcing a click event on housing button
       $('#housing-form').toggle(true);
       $('#routing-form').toggle(false);
@@ -133,6 +149,9 @@ jQuery.noConflict();
       $('#mapSidebar').toggle(true);
       // clear potentially old search results
       $('#routing-form-results').html('');
+
+      // reverse isometric flow
+      geocode(String(clickedLat) + ',' + String(clickedLon));
 
       // routing logic
       if(navigator.geolocation) {  
@@ -232,14 +251,144 @@ jQuery.noConflict();
       marker = new H.map.Marker(coords, {icon: markerIcon});
       map.addObject(marker);
       // call route map function (eventually move to a button onclick event)
-      //mapRoute(parseFloat(location.coords.longitude),parseFloat(location.coords.latitude),parseFloat(clickedLon),parseFloat(clickedLat));
+      mapRoute(parseFloat(location.coords.longitude),parseFloat(location.coords.latitude),parseFloat(clickedLon),parseFloat(clickedLat));
     }
 
     function locationError(msg) { console.log(msg); }
 
+    reverseFlowCallback = function(result)
+    {
+      /*
+      if(shapegroup !== undefined)
+      {
+        map.removeObject(shapegroup);
+        shapegroup = null;
+      }
+      */
+      if(!result.response){
+        alert("Error: " + result.Details);
+        return;
+      }
+      
+      //var shapegroup = new H.map.Group();
+      shapegroup.removeAll();
+      var shape = result.response.isoline[0].component[0].shape,
+      strip = new H.geo.Strip();
+
+      for (var i = 0; i < shape.length; i++)
+      {
+        var split = shape[i].trim().split(",");
+        if(split.length === 2){
+          var lat = parseFloat(split[0]);
+          var lon = parseFloat(split[1]);
+          strip.pushLatLngAlt( lat, lon, 0);
+        }
+      }
+
+      var shp = new H.map.Polygon(strip,
+        {
+          style: { lineWidth: 5, strokeColor: "rgba(34, 204, 34, 0.5)"}
+        }
+      );
+
+      shapegroup.addObject(shp);
+      map.addObject(shapegroup);
+
+      //map.setViewBounds(shapegroup.getBounds());
+    }
+
+    // do a Geocode
+    geocode = function(term)
+    {
+      //add Geocoder Release information if not already done
+      /*
+      if (releaseGeocoderShown== false){
+        loadGeocoderVersionTxt();
+        releaseGeocoderShown = true;
+      }*/
+      geoUrl = [
+        "http", 
+        //secure ? "s" : "", 
+        "://geocoder.cit.api.here.com/6.2/search.json?",
+        "searchtext=",
+        term,
+        "&maxresults=1",
+        "&app_id=",
+        appId,
+        "&app_code=",
+        appCode,
+        "&jsoncallback=",
+        "geocallback"
+        ].join("");
+
+        script = document.createElement("script");
+        script.src = geoUrl;
+        document.body.appendChild(script);
+    }
+
+    geocallback = function(result)
+    {
+      if(result.Response.View[0].Result[0].Location != null)
+      {
+        pos = result.Response.View[0].Result[0].Location.DisplayPosition;
+      }
+      else
+      {
+        pos = result.Response.View[0].Result[0].Place.Locations[0].DisplayPosition;
+      }
+
+      destination = new H.geo.Point(pos.Latitude, pos.Longitude);
+      //addMarkerToPosition(destination);
+      //calculateReverseFlow(document.getElementById("rangevalue").value);
+      calculateReverseFlow(10); // hardcode 10 minute reverse flow
+    }
+
+    var calculateReverseFlow = function(rangeValue)
+    {
+      var rangeType = 'time';
+
+      routeUrl = [
+        "https://isoline.route.cit.api.here.com/",
+        "routing/",
+        "7.2/",
+        "calculateisoline.json?",
+        "destination=",
+        clickedLat,
+        ",",
+        clickedLon,
+        "&",
+        "mode=fastest;car;traffic:" +  "disabled",
+        "&rangetype=" + rangeType,
+        "&",
+        "range=",
+        rangeValue * (rangeType == "time" ? 60 : 1000),
+        "&",
+        "linkattributes=sh&",
+        "app_code=",
+        appCode,
+        "&",
+        "app_id=",
+        appId,
+        "&jsoncallback=reverseFlowCallback"].join("");
+
+        script = document.createElement("script");
+        script.src = routeUrl;
+        document.body.appendChild(script);
+    }
+
+	  
+
+
+    /* DOM On Click Events */
+
     // get directions button mapping
     $('#get-directions').on('click', function(event) {
       mapRoute(currLon, currLat, clickedLon, clickedLat);
+    });
+
+    // Aggregate Score Expand
+    $(document).on('click','#agg-score-header',function() {
+        $('#agg-score-body').toggle('fast');
     });
 
     // stupid button onclick events have to be here
