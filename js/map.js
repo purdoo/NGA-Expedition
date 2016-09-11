@@ -152,6 +152,9 @@ jQuery.noConflict();
       var nDev = tallyNScore(censusObjDictionary[data.communityAreaNumber], censusAggregates);
       nScore = 300 + nDev;
 
+      // misc score calc
+      eScore = inferCrimeIndexFromHousing(data);
+
       // 'loading' score header
       var scoreHtml = '<div id="agg-score-header"><h3>Aggregate Score: Calculating...</h3></div>';
       $('#score-summary').html(scoreHtml);      
@@ -159,7 +162,7 @@ jQuery.noConflict();
       // metrics page, placeholders for our slowpokes
       var metricsHtml = '<h3>Area Score: ' + nScore.toFixed(2) + ' (Baseline: 300)</h3><div class="well">' + metricsData + '</div>';
       metricsHtml += '<div id="cScoreWell"><h3>Crime Score: Calculating...</h3><div class="well">' + '</div></div>';
-      metricsHtml += '<div id="eScoreWell"><h3>Misc. Score: Calculating...</h3><div class="well">' + '</div></div>';
+      metricsHtml += '<div id="eScoreWell"><h3>Misc. Score: ' + eScore.toFixed(2) + '</h3><div class="well">' + '</div></div>';
       $('#metrics-form').html(metricsHtml);
 
 
@@ -407,19 +410,19 @@ jQuery.noConflict();
         for(var i = 0; i < obj.length; i++) {
           addCrimeMarker(obj[i].location.longitude, obj[i].location.latitude);
           if(obj[i].primary_type == "HOMICIDE"){
-            crimeScore -= 0.95;
+            //crimeScore -= 0.95;
             homMod += 0.95;
           } else if(obj[i].primary_type == "THEFT"){
-            crimeScore -= 0.45;
+            //crimeScore -= 0.45;
             theftMod += 0.45;
           } else if(obj[i].primary_type == "ROBBERY"){
-            crimeScore -= 0.65;
+            //crimeScore -= 0.65;
             robMod += 0.65;
           } else if(obj[i].primary_type == "CRIMINAL DAMAGE"){
-            crimeScore -= 0.42;
+            //crimeScore -= 0.42;
             damageMod += 0.42
           } else {
-            crimeScore -= 0.215;
+            //crimeScore -= 0.215;
             otherMod += 0.215;
           }
         }
@@ -445,11 +448,27 @@ jQuery.noConflict();
         //$('#metrics-form').html(metricsHtml);
 
       });
-
-    
-     
-      
     }
+
+    // create rough crime score from housing location 
+    var inferCrimeIndexFromHousing = function(obj) {
+      var crimeIndex = 50;
+      var chiOriginLat = 41.8820586;
+
+      var latDelta = parseFloat(obj.lat) - chiOriginLat;
+      //console.log("latDelta:" + latDelta);
+      var factor = (latDelta * 100)/2;
+      //console.log("factor:" + factor);
+      if(obj.propertyType == "Senior"){
+        crimeIndex += 23.2;
+      } 
+
+      if(latDelta != 0){
+        crimeIndex += factor * 5.3;
+      }
+      return crimeIndex;
+    }
+
 
     /* DOM On Click Events */
 
@@ -474,7 +493,6 @@ jQuery.noConflict();
     });
     // Zoom
     $(document).on('click','#zoom',function() {
-      //$('#agg-score-body').toggle('fast');
       map.setZoom(14);
       var coords = {lat: clickedLat, lng: clickedLon};
       map.setCenter(coords);
