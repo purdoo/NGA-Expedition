@@ -40,6 +40,10 @@ container {
 /* Icons up in this bitch */
 
 /* Conditional positive/negative metric styling */
+.metricEqual {
+  color: gray;
+}
+
 div#percentHousingCrowded.metricLessThan {
   color: green;
 }
@@ -53,6 +57,35 @@ div#percentHouseholdsBelowPoverty.metricLessThan {
 div#percentHouseholdsBelowPoverty.metricGreaterThan {
   color: red;
 }
+
+div#percentAged16Unemployed.metricLessThan {
+  color: green;
+}
+div#percentAged16Unemployed.metricGreaterThan {
+  color: red;
+}
+
+div#percentAged25NoDiploma.metricLessThan {
+  color: green;
+}
+div#percentAged25NoDiploma.metricGreaterThan {
+  color: red;
+}
+
+div#percentHouseholdsBelowPoverty.metricLessThan {
+  color: green;
+}
+div#percentHouseholdsBelowPoverty.metricGreaterThan {
+  color: red;
+}
+
+div#perCapitaIncome.metricLessThan {
+  color: red;
+}
+div#perCapitaIncome.metricGreaterThan {
+  color: green;
+}
+
 
 
 /* Metric Classes */
