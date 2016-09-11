@@ -10,6 +10,8 @@ jQuery.noConflict();
     var currLon = 0;
     var currLat = 0;
 
+    var isolineTime = 10;
+
     // Initialize the platform object:
     var platform = new H.service.Platform({
     'app_id': appId,
@@ -28,15 +30,6 @@ jQuery.noConflict();
       zoom: 11,
       center: { lng: -87.6405556, lat: 41.8822222 }
     });
-
-    /* Map Event Handlers */
-    /*
-    map.addEventListener('tap', function(evt) {
-      console.log(evt);
-      console.log(evt.type, evt.currentPointer.type);
-
-    });
-    */
 
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     
@@ -76,7 +69,6 @@ jQuery.noConflict();
       $(xml).find('row').each(function() {
         var entry = $(this);
         var censusObj = parseCensus(entry);
-        //TODO : addHousingMarker(housingObj);
         if(censusObj.communityAreaNumber != null) {
           if(Number.isInteger(parseInt(censusObj.communityAreaNumber))){
             censusObjDictionary[censusObj.communityAreaNumber] = censusObj
@@ -87,6 +79,16 @@ jQuery.noConflict();
       });
       console.log(censusAggregates);
     });
+
+    var crimeDict = {};
+    var crimeUrl = 'https://data.cityofchicago.org/resource/vwwp-7yr9.json';
+    $.get(crimeUrl, {}).done( function (obj) {
+      for(var i = 0; i < obj.length; i++) {
+        //console.log(obj[i]);
+        var returnObj = parseCrime(obj[i]);
+      }
+    });
+
 
     // add marker for housing object, embed geojson data into the map
     var addHousingMarker = function(obj) {
@@ -105,6 +107,9 @@ jQuery.noConflict();
 
     var housingMarkerOnClick = function(event) {
       var data = event.target.getData();
+      // clear isoline layer
+      shapegroup.removeAll();
+
       // set hacky ass globals
       clickedLat = data.lat;
       clickedLon = data.lon;
@@ -152,6 +157,9 @@ jQuery.noConflict();
 
       // reverse isometric flow
       geocode(String(clickedLat) + ',' + String(clickedLon));
+      //isolineTime = 4;
+      //geocode(String(clickedLat) + ',' + String(clickedLon));
+      //isolineTime = 10;
 
       // routing logic
       if(navigator.geolocation) {  
@@ -199,12 +207,6 @@ jQuery.noConflict();
         'representation': 'display'
       },
       onResult = function(result) {
-        //add Routing Release number if not already done
-        /*
-        if (releaseRoutingShown== false){
-          releaseInfoTxt.innerHTML+="<br />HLP Routing: "+result.response.metaInfo.moduleVersion;
-          releaseRoutingShown = true;
-        }*/
         console.log(result);
         var strip = new H.geo.Strip(),
         shape = result.response.route[0].shape,
@@ -221,7 +223,7 @@ jQuery.noConflict();
         {
           style:
           {
-            lineWidth: 10,
+            lineWidth: 6,
             strokeColor: "rgba(0, 128, 0, 0.7)"
           }
         });
@@ -258,20 +260,12 @@ jQuery.noConflict();
 
     reverseFlowCallback = function(result)
     {
-      /*
-      if(shapegroup !== undefined)
-      {
-        map.removeObject(shapegroup);
-        shapegroup = null;
-      }
-      */
       if(!result.response){
         alert("Error: " + result.Details);
         return;
       }
-      
-      //var shapegroup = new H.map.Group();
-      shapegroup.removeAll();
+    
+      //shapegroup.removeAll(); // move to onclick call
       var shape = result.response.isoline[0].component[0].shape,
       strip = new H.geo.Strip();
 
@@ -301,11 +295,7 @@ jQuery.noConflict();
     geocode = function(term)
     {
       //add Geocoder Release information if not already done
-      /*
-      if (releaseGeocoderShown== false){
-        loadGeocoderVersionTxt();
-        releaseGeocoderShown = true;
-      }*/
+
       geoUrl = [
         "http", 
         //secure ? "s" : "", 
@@ -340,7 +330,7 @@ jQuery.noConflict();
       destination = new H.geo.Point(pos.Latitude, pos.Longitude);
       //addMarkerToPosition(destination);
       //calculateReverseFlow(document.getElementById("rangevalue").value);
-      calculateReverseFlow(10); // hardcode 10 minute reverse flow
+      calculateReverseFlow(isolineTime);
     }
 
     var calculateReverseFlow = function(rangeValue)
@@ -375,9 +365,6 @@ jQuery.noConflict();
         script.src = routeUrl;
         document.body.appendChild(script);
     }
-
-	  
-
 
     /* DOM On Click Events */
 

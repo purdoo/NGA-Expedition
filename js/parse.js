@@ -31,3 +31,11 @@ var parseCensus = function(entry) {
 
   return censusObj;
 }
+
+ // create obj from crime data (json)
+var parseCrime = function(obj) {
+  console.log(obj);
+  crimeObj = {};
+
+  return crimeObj;
+}
