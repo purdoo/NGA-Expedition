@@ -102,7 +102,7 @@ jQuery.noConflict();
       censusObj.percentAged16Unemployed = entry.find('percent_aged_16_unemployed').text();
       censusObj.percentAged25NoDiploma = entry.find('percent_aged_25_without_high_school_diploma').text();
       censusObj.percentAgedUnder18orOver64 = entry.find('percent_aged_under_18_or_over_64').text();
-      censusObj.perCapitaIncome = entry.find('per_capita_income').text();
+      censusObj.perCapitaIncome = entry.find('per_capita_income_').text();
       censusObj.hardshipIndex = entry.find('hardship_index').text();
       
       return censusObj;
@@ -184,18 +184,20 @@ jQuery.noConflict();
       var sumPerCapitaIncome = 0;
       var sumHardshipIndex =0;
 
-      for (var key in objDict) {
-        var caNumber = parseInt(key)
-        if( caNumber != NaN) {
-          sumCensusObj++;
-          sumPercentHousingCrowded = sumPercentHousingCrowded + parseFloat(objDict[key].percentHousingCrowded);
-          sumPercentHouseholdsBelowPoverty = sumPercentHouseholdsBelowPoverty + parseFloat(objDict[key].percentHouseholdsBelowPoverty);
-          sumPercentAged16Unemployed = sumPercentAged16Unemployed + parseFloat(objDict[key].percentAged16Unemployed);
-          sumPercentAged25NoDiploma = sumPercentAged25NoDiploma + parseFloat(objDict[key].percentAged25NoDiploma);
-          sumPercentAgedUnder18orOver64 = sumPercentAgedUnder18orOver64 + parseFloat(objDict[key].percentAgedUnder18orOver64);
-          sumPerCapitaIncome = sumPerCapitaIncome + parseInt(objDict[key].perCapitaIncome);
-          sumHardshipIndex = sumHardshipIndex + parseInt(objDict[key].hardshipIndex);
-
+      for(var key in objDict) {
+        if (objDict.hasOwnProperty(key)) {
+          var caNumber = parseInt(key)
+          if(caNumber != NaN) {
+            sumCensusObj += 1;
+            sumPercentHousingCrowded = sumPercentHousingCrowded + parseFloat(objDict[key].percentHousingCrowded);
+            sumPercentHouseholdsBelowPoverty = sumPercentHouseholdsBelowPoverty + parseFloat(objDict[key].percentHouseholdsBelowPoverty);
+            sumPercentAged16Unemployed = sumPercentAged16Unemployed + parseFloat(objDict[key].percentAged16Unemployed);
+            sumPercentAged25NoDiploma = sumPercentAged25NoDiploma + parseFloat(objDict[key].percentAged25NoDiploma);
+            sumPercentAgedUnder18orOver64 = sumPercentAgedUnder18orOver64 + parseFloat(objDict[key].percentAgedUnder18orOver64);
+            console.log(objDict[key].perCapitaIncome);
+            sumPerCapitaIncome = sumPerCapitaIncome + parseInt(objDict[key].perCapitaIncome);
+            sumHardshipIndex = sumHardshipIndex + parseInt(objDict[key].hardshipIndex);
+          }
         }
       }
       console.log(sumCensusObj);
