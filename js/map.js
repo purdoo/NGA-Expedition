@@ -121,8 +121,10 @@ jQuery.noConflict();
       dataHtml += '</div>';
       $('#housing-form').html(dataHtml);
       var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
+      var nDev = tallyNScore(censusObjDictionary[data.communityAreaNumber], censusAggregates);
+      var nScore = (300 + nDev).toFixed(2);
       //console.log(metricsData);
-      $('#metrics-form').html('<h3>Neighborhood Score</h3><div class="well">' + metricsData + '</div>');
+      $('#metrics-form').html('<h3>Area Score: ' + nScore + ' (Baseline: 300)</h3><div class="well">' + metricsData + '</div>');
       // basically forcing a click event on housing button
       $('#housing-form').toggle(true);
       $('#routing-form').toggle(false);

@@ -46,9 +46,32 @@ function displayAggregates(obj, aggObj, displayHtml = '') {
 }
 
 function tallyNScore(obj, aggObj) {
-	
-    //var percentage = (((objVal - aggVal ) / aggVal) * 100).toFixed(2);
-    
+    var nScore = 0;
+	// for percent crowded housing
+    var percentage = (((obj.percentHousingCrowded - aggObj.avgPercentHousingCrowded ) / aggObj.avgPercentHousingCrowded));
+    console.log(percentage);
+    nScore -= (40 * percentage);
+    console.log(nScore);
+    // for households below poverty
+    var percentage = (((obj.percentHouseholdsBelowPoverty - aggObj.avgPercentHouseholdsBelowPoverty ) / aggObj.avgPercentHouseholdsBelowPoverty));
+    nScore -= (50 * percentage);
+    console.log(percentage);
+    console.log(nScore);
+    // for unemployed above 16
+    var percentage = (((obj.percentAged16Unemployed - aggObj.avgPercentAged16Unemployed ) / aggObj.avgPercentAged16Unemployed));
+    nScore -= (55 * percentage);
+    // aged 25, no diploma
+    var percentage = (((obj.percentAged25NoDiploma - aggObj.avgPercentAged25NoDiploma ) / aggObj.avgPercentAged25NoDiploma));
+    nScore -= (50 * percentage);
+    // aged under 18 or over 64
+    var percentage = (((obj.percentAgedUnder18orOver64 - aggObj.avgPercentAgedUnder18orOver64 ) / aggObj.avgPercentAgedUnder18orOver64));
+    nScore -= (20 * percentage);
+    // aged under 18 or over 64
+    var percentage = (((obj.perCapitaIncome - aggObj.avgPerCapitaIncome ) / aggObj.avgPerCapitaIncome));
+    nScore += (40 * percentage);
+
+    console.log(nScore);
+    return nScore;
 }
 
 function computePercentVariance(objVal, aggVal) {
