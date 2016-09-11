@@ -19,10 +19,11 @@
       src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
     <script type="text/javascript" charset="UTF-8"
       src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    <script src="js/agg.js"></script>
     <script src="js/routing.js"></script>
     <script src="js/parse.js"></script>
-    <script src="js/agg.js"></script>
-    <script src="js/touchtap.js"></script>
+    
+    <!--<script src="js/touchtap.js"></script>-->
     <script src="js/map.js"></script>
   </head> 
   <body>
