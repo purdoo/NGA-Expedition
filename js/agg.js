@@ -49,14 +49,10 @@ function tallyNScore(obj, aggObj) {
     var nScore = 0;
 	// for percent crowded housing
     var percentage = (((obj.percentHousingCrowded - aggObj.avgPercentHousingCrowded ) / aggObj.avgPercentHousingCrowded));
-    console.log(percentage);
     nScore -= (40 * percentage);
-    console.log(nScore);
     // for households below poverty
     var percentage = (((obj.percentHouseholdsBelowPoverty - aggObj.avgPercentHouseholdsBelowPoverty ) / aggObj.avgPercentHouseholdsBelowPoverty));
     nScore -= (50 * percentage);
-    console.log(percentage);
-    console.log(nScore);
     // for unemployed above 16
     var percentage = (((obj.percentAged16Unemployed - aggObj.avgPercentAged16Unemployed ) / aggObj.avgPercentAged16Unemployed));
     nScore -= (55 * percentage);
@@ -81,7 +77,7 @@ function computePercentVariance(objVal, aggVal) {
 }
 
 function displayVariances(variance, metricName, message) {
-    console.log(variance);
+
     var numVar = parseFloat(variance.split('%')[0]);
 	if(numVar < -7) {
 		return '<div id="'+ metricName + '" class="metricLessThan">' + message + '</div>';

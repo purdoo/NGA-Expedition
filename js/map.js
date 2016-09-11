@@ -110,21 +110,31 @@ jQuery.noConflict();
       clickedLon = data.lon;
       // sidebar html for housing info
       $('#housing-form').html('');
-      //console.log(data);
+      console.log(data);
       var dataHtml = '<div id="sidebar-info">';
       dataHtml += '<div id="name"><h3>' + data.propertyName + '</h3></div>';
       dataHtml += '<div id="address">Address: ' + data.address + '</div>';
       dataHtml += '<div id="area">Community Area: ' + data.communityArea + '</div>';      
       dataHtml += '<div id="type">Housing Type: ' + data.propertyType + '</div>';
+      dataHtml += '<div id="management">Management Company: ' + data.managementCompany + '</div>';
+      dataHtml += '<div id="phone">Phone Number: ' + data.phoneNumber + '</div>';
+      dataHtml += '<a>Zoom To</a>';
 
-      dataHtml += '';
-      dataHtml += '</div>';
-      $('#housing-form').html(dataHtml);
       var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
       var nDev = tallyNScore(censusObjDictionary[data.communityAreaNumber], censusAggregates);
-      var nScore = (300 + nDev).toFixed(2);
+      var nScore = 300 + nDev;
+      var cScore = 150.0;
+      var eScore = 25.0;
+      var aggScore = (nScore + cScore + eScore);
+      // aggregate score header
+      dataHtml += '<div id="agg-score-header"><h3>Aggregate Score: ' + aggScore.toFixed(2) + '</h3></div>';
+      // detailed score body
+      dataHtml += '<div id="agg-score-body"><h4>Neighborhood Score: ' + nScore.toFixed(2) + '</h4><h4>Crime Score: ' + cScore + '</h4><h4>Misc. Score: ' + eScore + '</h4></h3></div>';
+      dataHtml += '</div>';
+      $('#housing-form').html(dataHtml);
+      
       //console.log(metricsData);
-      $('#metrics-form').html('<h3>Area Score: ' + nScore + ' (Baseline: 300)</h3><div class="well">' + metricsData + '</div>');
+      $('#metrics-form').html('<h3>Area Score: ' + nScore.toFixed(2) + ' (Baseline: 300)</h3><div class="well">' + metricsData + '</div>');
       // basically forcing a click event on housing button
       $('#housing-form').toggle(true);
       $('#routing-form').toggle(false);
