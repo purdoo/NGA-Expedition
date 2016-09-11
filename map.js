@@ -68,12 +68,32 @@ jQuery.noConflict();
         var entry = $(this);
         var censusObj = parseCensus(entry);
         //TODO : addHousingMarker(housingObj);
-        censusObjDictionary[censusObj.communityAreaNumber] = censusObj
-        
+        if(censusObj.communityAreaNumber != null) {
+          censusObjDictionary[censusObj.communityAreaNumber] = censusObj
+        }
+
       });
       censusAggregates = computeAggregateCensusMetrics(censusObjDictionary)
       console.log(censusAggregates);
     });
+
+    // create obj from raw census data xml
+    var parseCensus = function(entry) {
+      censusObj = {}
+      if(entry.find('ca').text() != null) {
+        censusObj.communityArea = entry.find('community_area_name').text();
+        censusObj.communityAreaNumber = entry.find('ca').text();
+        censusObj.percentHousingCrowded = entry.find('percent_of_housing_crowded').text();
+        censusObj.percentHouseholdsBelowPoverty = entry.find('percent_households_below_poverty').text();
+        censusObj.percentAged16Unemployed = entry.find('percent_aged_16_unemployed').text();
+        censusObj.percentAged25NoDiploma = entry.find('percent_aged_25_without_high_school_diploma').text();
+        censusObj.percentAgedUnder18orOver64 = entry.find('percent_aged_under_18_or_over_64').text();
+        censusObj.perCapitaIncome = entry.find('per_capita_income_').text();
+        censusObj.hardshipIndex = entry.find('hardship_index').text();
+      }
+      
+      return censusObj;
+    }
 
     /* Drawing Functions */
 
