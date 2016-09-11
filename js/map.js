@@ -11,6 +11,11 @@ jQuery.noConflict();
     var currLat = 0;
 
     var isolineTime = 10;
+    // global scores
+    var nScore = 300;
+    var cScore = 0;
+    var eScore = 0;
+
 
     // Initialize the platform object:
     var platform = new H.service.Platform({
@@ -126,17 +131,18 @@ jQuery.noConflict();
       clickedLat = data.lat;
       clickedLon = data.lon;
       // sidebar html for housing info
-      $('#housing-form').html('');
+      $('#housing-form-info').html('');
       console.log(data);
-      var dataHtml = '<div id="sidebar-info">';
-      dataHtml += '<div id="name"><h3>' + data.propertyName + '</h3></div>';
-      dataHtml += '<div id="address">Address: ' + data.address + '</div>';
-      dataHtml += '<div id="area">Community Area: ' + data.communityArea + '</div>';      
-      dataHtml += '<div id="type">Housing Type: ' + data.propertyType + '</div>';
-      dataHtml += '<div id="management">Management Company: ' + data.managementCompany + '</div>';
-      dataHtml += '<div id="phone">Phone Number: ' + data.phoneNumber + '</div>';
-      dataHtml += '<a id="zoom">Zoom To</a>';
-
+      //var dataHtml = '<div id="sidebar-info">';
+      dataHtml = '<div id="name"><h3>' + data.propertyName + '</h3></div>';
+      dataHtml += '<div id="address"><h4>Address: ' + data.address + '</h4></div>';
+      dataHtml += '<div id="area"><h4>Community Area: ' + data.communityArea + '</h4></div>';      
+      dataHtml += '<div id="type"><h4>Housing Type: ' + data.propertyType + '</h4></div>';
+      dataHtml += '<div id="management"><h4>Management Company: ' + data.managementCompany + '</h4></div>';
+      dataHtml += '<div id="phone"><h4>Phone Number: ' + data.phoneNumber + '</h4></div>';
+      dataHtml += '<a id="zoom"><b>Zoom To</b></a>';
+      //dataHtml += '</div>';
+      $('#housing-form-info').html(dataHtml);
 
       //Crime Score
       console.log("calculating crime");
@@ -144,22 +150,16 @@ jQuery.noConflict();
 
       var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
       var nDev = tallyNScore(censusObjDictionary[data.communityAreaNumber], censusAggregates);
-      var nScore = 300 + nDev;
-      var cScore = 150.0;
-      var eScore = 25.0;
-      var aggScore = (nScore + cScore + eScore);
-      // aggregate score header
-      dataHtml += '<div id="agg-score-header"><h3>Aggregate Score: ' + aggScore.toFixed(2) + '</h3></div>';
-      // detailed score body
-      dataHtml += '<div id="agg-score-body"><h4>Neighborhood Score: ' + nScore.toFixed(2) + '</h4><h4>Crime Score: ' + cScore + '</h4><h4>Misc. Score: ' + eScore + '</h4></h3></div>';
-      dataHtml += '</div>';
-      
-      $('#housing-form').html(dataHtml);
-      
-      //console.log(metricsData);
+      nScore = 300 + nDev;
+
+      // 'loading' score header
+      var scoreHtml = '<div id="agg-score-header"><h3>Aggregate Score: Calculating...</h3></div>';
+      $('#score-summary').html(scoreHtml);      
+     
+      // metrics page, placeholders for our slowpokes
       var metricsHtml = '<h3>Area Score: ' + nScore.toFixed(2) + ' (Baseline: 300)</h3><div class="well">' + metricsData + '</div>';
-      metricsHtml += '<h3>Crime Score: ' + cScore.toFixed(2) + ' (Baseline: 400)</h3><div class="well">' + '</div>';
-      metricsHtml += '<h3>Misc. Score: ' + eScore.toFixed(2) + '</h3><div class="well">' + '</div>';
+      metricsHtml += '<div id="cScoreWell"><h3>Crime Score: Calculating...</h3><div class="well">' + '</div></div>';
+      metricsHtml += '<div id="eScoreWell"><h3>Misc. Score: Calculating...</h3><div class="well">' + '</div></div>';
       $('#metrics-form').html(metricsHtml);
 
 
@@ -400,26 +400,50 @@ jQuery.noConflict();
       //console.log(finalCrimeQueryUrl);
       $.get(finalCrimeQueryUrl, {}).done( function (obj) {
         localCrimeArr = obj;
-        var crimeScore = 400;
+        var crimeScore = 500;
         console.log(obj.length);
+        var homMod = 0, theftMod = 0, robMod = 0, damageMod = 0, otherMod = 0;
+      
         for(var i = 0; i < obj.length; i++) {
-          //console.log(obj[i]);
           addCrimeMarker(obj[i].location.longitude, obj[i].location.latitude);
-          //console.log(obj[i].primary_type);
           if(obj[i].primary_type == "HOMICIDE"){
             crimeScore -= 0.95;
+            homMod += 0.95;
           } else if(obj[i].primary_type == "THEFT"){
             crimeScore -= 0.45;
+            theftMod += 0.45;
           } else if(obj[i].primary_type == "ROBBERY"){
             crimeScore -= 0.65;
+            robMod += 0.65;
           } else if(obj[i].primary_type == "CRIMINAL DAMAGE"){
             crimeScore -= 0.42;
+            damageMod += 0.42
           } else {
             crimeScore -= 0.215;
+            otherMod += 0.215;
           }
         }
-        //console.log(crimeScore);
-        return crimeScore;
+        crimeScore -= homMod;
+        crimeScore -= theftMod;
+        crimeScore -= robMod;
+        crimeScore -= damageMod;
+        crimeScore -= otherMod;
+        
+        // inject our scores, calculate
+        var cScore = crimeScore;
+        var aggScore = (nScore + cScore + eScore);
+        // aggregate score header
+        var scoreHtml = '';
+        scoreHtml += '<div id="agg-score-header"><h3>Aggregate Score: ' + aggScore.toFixed(2) + '</h3></div>';
+        // detailed score body
+        scoreHtml += '<div id="agg-score-body"><h4>Neighborhood Score: ' + nScore.toFixed(2) + '</h4><h4>Crime Score: ' + cScore.toFixed(2) + '</h4><h4>Misc. Score: ' + eScore.toFixed(2) + '</h4></h3></div>';
+        $('#score-summary').html(scoreHtml);
+      
+        // inject metrics into the metric page
+        $('#cScoreWell').html('<h3>Crime Score: ' + cScore.toFixed(2) + ' </h3><div class="well">' + '</div>');
+        $('#eScoreWell').html('<h3>Misc. Score: ' + eScore.toFixed(2) + '</h3><div class="well">' + '</div>');
+        //$('#metrics-form').html(metricsHtml);
+
       });
 
     

@@ -43,7 +43,10 @@
             </div>
             <hr>
         </div>
-        <div id="housing-form"></div>
+        <div id="housing-form">
+          <div id="housing-form-info"></div>
+          <div id="score-summary"></div>
+        </div>
         <div id="routing-form">
           <div id="routing-form-nav">
             <button type="button" class="btn btn-default" id="get-directions">Get Directions</button>
