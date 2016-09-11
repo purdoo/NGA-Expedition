@@ -61,7 +61,7 @@ jQuery.noConflict();
     
     var censusObjDictionary = {};
     var censusUrl = 'https://data.cityofchicago.org/api/views/kn9c-c2s2/rows.xml?accessType=DOWNLOAD'
-    var censusAggregates = {}
+    var censusAggregates = {};
     $.get(censusUrl, {
       // wait for the callback
     }).done( function (xml) {
@@ -79,7 +79,6 @@ jQuery.noConflict();
         } 
 
       });
-      censusAggregates = 
       console.log(censusAggregates);
     });
 
@@ -116,6 +115,10 @@ jQuery.noConflict();
 
       dataHtml += '';
       dataHtml += '</div>';
+
+      console.log(censusObjDictionary[data.communityAreaNumber])
+      console.log(censusAggregates)
+      dataHtml += displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates, dataHtml)
 
       $('#mapSidebar').html(dataHtml);
       $('#mapSidebar').toggle(true);
