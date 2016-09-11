@@ -25,6 +25,8 @@ container {
 
 #metrics-form {
   display:none;
+  height:600px;
+  overflow-y:auto;
 }
 
 #routing-form {

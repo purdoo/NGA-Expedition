@@ -134,7 +134,10 @@ jQuery.noConflict();
       $('#housing-form').html(dataHtml);
       
       //console.log(metricsData);
-      $('#metrics-form').html('<h3>Area Score: ' + nScore.toFixed(2) + ' (Baseline: 300)</h3><div class="well">' + metricsData + '</div>');
+      var metricsHtml = '<h3>Area Score: ' + nScore.toFixed(2) + ' (Baseline: 300)</h3><div class="well">' + metricsData + '</div>';
+      metricsHtml += '<h3>Crime Score: ' + cScore.toFixed(2) + ' (Baseline: 400)</h3><div class="well">' + '</div>';
+      metricsHtml += '<h3>Crime Score: ' + eScore.toFixed(2) + '</h3><div class="well">' + '</div>';
+      $('#metrics-form').html(metricsHtml);
       // basically forcing a click event on housing button
       $('#housing-form').toggle(true);
       $('#routing-form').toggle(false);
