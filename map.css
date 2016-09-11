@@ -19,4 +19,25 @@ container {
   background-color: white;
   display:none;
   padding-bottom: 20px;
+  width: 35%;
+}
+
+/* Styling Buttons */
+.btn-group-justified>.btn-group .btn {
+  width: 100%;
+}
+
+.btn-group-justified .btn-group .btn.active {
+  color: #0054a4;
+  border-bottom-color: #0054a4;
+  background: none;
+  box-shadow: none;
+}
+
+.btn-group-justified .btn-group .btn {
+  width: auto;
+  padding: 10px 35px;
+  border: solid transparent;
+  border-width: 0 0 2px 0;
+  border-radius: 0;
 }

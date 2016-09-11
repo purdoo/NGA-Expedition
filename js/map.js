@@ -7,6 +7,9 @@ jQuery.noConflict();
     
     var clickedLon = 0;
     var clickedLat = 0;
+    var currLon = 0;
+    var currLat = 0;
+
     // Initialize the platform object:
     var platform = new H.service.Platform({
     'app_id': appId,
@@ -42,6 +45,8 @@ jQuery.noConflict();
     map.addObject(housingGroup);
     var districtGroup = new H.map.Group();
     map.addObject(districtGroup);
+    var routeGroup = new H.map.Group();
+    map.addObject(routeGroup);
 
     var housingObjArr = [];
     var url = 'https://data.cityofchicago.org/api/views/s6ha-ppgi/rows.xml?accessType=DOWNLOAD'
@@ -77,7 +82,6 @@ jQuery.noConflict();
             censusAggregates = computeAggregateCensusMetrics(censusObj)
           } 
         } 
-
       });
       console.log(censusAggregates);
     });
@@ -105,7 +109,7 @@ jQuery.noConflict();
       clickedLat = data.lat;
       clickedLon = data.lon;
       // sidebar html for housing info
-      $('#mapSidebar').html('');
+      $('#housing-form').html('');
       console.log(data);
       var dataHtml = '<div id="sidebar-info">';
       dataHtml += '<div id="name"><h3>' + data.propertyName + '</h3></div>';
@@ -116,11 +120,10 @@ jQuery.noConflict();
       dataHtml += '';
       dataHtml += '</div>';
 
-      console.log(censusObjDictionary[data.communityAreaNumber])
-      console.log(censusAggregates)
       dataHtml += displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates, dataHtml)
 
       $('#mapSidebar').html(dataHtml);
+      $('#housing-form').html(dataHtml);
       $('#mapSidebar').toggle(true);
 
       // routing logic
@@ -200,7 +203,7 @@ jQuery.noConflict();
             }
           });
 
-          map.addObject(polyline);
+          routeGroup.addObject(polyline);
           //map.setViewBounds(polyline.getBounds(), true);
       },
       onError = function(error) { console.log(error);}
@@ -211,17 +214,43 @@ jQuery.noConflict();
       console.log(location);
       var size = new H.math.Size(40,40);
       var markerIcon = new H.map.Icon('img/marker1.png',{size:size});
-      currLat = 
+      currLat = location.coords.latitude;
       currLon = location.coords.longitude;
       var coords = { lat: location.coords.latitude, lng: location.coords.longitude };
       marker = new H.map.Marker(coords, {icon: markerIcon});
       map.addObject(marker);
-      // call route map function
-      
+      // call route map function (eventually move to a button onclick event)
       mapRoute(parseFloat(location.coords.longitude),parseFloat(location.coords.latitude),parseFloat(clickedLon),parseFloat(clickedLat));
     }
 
     function locationError(msg) { console.log(msg); }
+
+
+    // stupid button onclick events have to be here
+    $('#housing-button').on('click', function(event) {
+      $('#housing-form').toggle(true);
+      $('#routing-form').toggle(false);
+      $('#metrics-form').toggle(false);
+      $('#housing-button').addClass('active');
+      $('#routing-button').removeClass('active');
+      $('#metrics-button').removeClass('active');
+    });
+    $('#routing-button').on('click', function(event) {
+      $('#housing-form').toggle(false);
+      $('#routing-form').toggle(true);
+      $('#metrics-form').toggle(false);
+      $('#routing-button').addClass('active');
+      $('#housing-button').removeClass('active');
+      $('#metrics-button').removeClass('active');
+    });
+    $('#metrics-button').on('click', function(event) {
+      $('#housing-form').toggle(false);
+      $('#routing-form').toggle(false);
+      $('#metrics-form').toggle(true);
+      $('#routing-button').removeClass('active');
+      $('#housing-button').removeClass('active');
+      $('#metrics-button').addClass('active');
+    });
 
   }); // end document load
 
