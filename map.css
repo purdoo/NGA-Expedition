@@ -29,6 +29,10 @@ container {
   overflow-y:auto;
 }
 
+#zoom {
+  cursor:pointer;
+}
+
 #routing-form {
   display:none;
 }
@@ -53,6 +57,7 @@ container {
   display:none;
   padding-left:10px;
 }
+
 
 /* Conditional positive/negative metric styling */
 .metricEqual {

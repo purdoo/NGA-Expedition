@@ -118,7 +118,7 @@ jQuery.noConflict();
       dataHtml += '<div id="type">Housing Type: ' + data.propertyType + '</div>';
       dataHtml += '<div id="management">Management Company: ' + data.managementCompany + '</div>';
       dataHtml += '<div id="phone">Phone Number: ' + data.phoneNumber + '</div>';
-      dataHtml += '<a>Zoom To</a>';
+      dataHtml += '<a id="zoom">Zoom To</a>';
 
       var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
       var nDev = tallyNScore(censusObjDictionary[data.communityAreaNumber], censusAggregates);
@@ -388,7 +388,14 @@ jQuery.noConflict();
 
     // Aggregate Score Expand
     $(document).on('click','#agg-score-header',function() {
-        $('#agg-score-body').toggle('fast');
+      $('#agg-score-body').toggle('fast');
+    });
+    // Zoom
+    $(document).on('click','#zoom',function() {
+      //$('#agg-score-body').toggle('fast');
+      map.setZoom(14);
+      var coords = {lat: clickedLat, lng: clickedLon};
+      map.setCenter(coords);
     });
 
     // stupid button onclick events have to be here
