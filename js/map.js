@@ -69,11 +69,15 @@ jQuery.noConflict();
         var censusObj = parseCensus(entry);
         //TODO : addHousingMarker(housingObj);
         if(censusObj.communityAreaNumber != null) {
-          censusObjDictionary[censusObj.communityAreaNumber] = censusObj
-        }
+          if(Number.isInteger(parseInt(censusObj.communityAreaNumber))){
+            censusObjDictionary[censusObj.communityAreaNumber] = censusObj
+          } else {
+            censusAggregates = computeAggregateCensusMetrics(censusObj)
+          } 
+        } 
 
       });
-      censusAggregates = computeAggregateCensusMetrics(censusObjDictionary)
+      censusAggregates = 
       console.log(censusAggregates);
     });
 
