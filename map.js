@@ -184,7 +184,6 @@ jQuery.noConflict();
       var sumPerCapitaIncome = 0;
       var sumHardshipIndex =0;
 
-<<<<<<< HEAD
       for(var key in objDict) {
         if (objDict.hasOwnProperty(key)) {
           var caNumber = parseInt(key)
