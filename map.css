@@ -22,6 +22,14 @@ container {
   width: 35%;
 }
 
+#metrics-form {
+  display:none;
+}
+
+#routing-form {
+  display:none;
+}
+
 /* Styling Buttons */
 .btn-group-justified>.btn-group .btn {
   width: 100%;

@@ -119,11 +119,13 @@ jQuery.noConflict();
 
       dataHtml += '';
       dataHtml += '</div>';
-
-      dataHtml += displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates, dataHtml)
-
-      $('#mapSidebar').html(dataHtml);
       $('#housing-form').html(dataHtml);
+      var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
+      console.log(metricsData);
+      $('#metrics-form').html(metricsData);
+      $('#routing-form').toggle(false);
+      $('#metrics-form').toggle(false);
+      
       $('#mapSidebar').toggle(true);
 
       // routing logic
