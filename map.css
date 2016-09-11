@@ -39,7 +39,20 @@ container {
   height: 600px;
 }
 
-/* Icons up in this bitch */
+/* Direction Classes */
+.direction {
+  font-size: 120%;
+}
+
+/* Score Classes */
+#agg-score-header {
+  cursor:pointer;
+}
+
+#agg-score-body {
+  display:none;
+  padding-left:10px;
+}
 
 /* Conditional positive/negative metric styling */
 .metricEqual {
