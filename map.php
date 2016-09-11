@@ -1,15 +1,13 @@
 <?php
-  echo "Hello World!";
+  //echo "Hello World!";
 ?>
 
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <link rel="stylesheet" type="text/css"
-      href="https://js.api.here.com/v3/3.0/mapsjs-ui.css" />
-      <link rel="stylesheet" type="text/css"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-      <link rel="stylesheet" type="text/css" href="map.css"/>
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="map.css"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     
@@ -24,15 +22,33 @@
     <script src="js/routing.js"></script>
     <script src="js/parse.js"></script>
     <script src="js/agg.js"></script>
+    <script src="js/touchtap.js"></script>
     <script src="js/map.js"></script>
   </head> 
   <body>
     <div id=bounding class="map">
       <div id="mapContainer"></div>
       <div id="mapSidebar" class="col col-md-4">
-        <h3>Header</h3>
+        <div id="mapButtons">
+          <h2>Generic Header</h2>
+            <div class="btn-group btn-group-justified" role="group" style="padding-bottom: 20px;">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default active" id="housing-button">Info</button>
+                <button type="button" class="btn btn-default" id="routing-button">Routing</button>
+                <button type="button" class="btn btn-default" id="metrics-button">Metrics</button>
+              </div>
+            </div>
+            <hr>
+        </div>
+        <div id="housing-form"></div>
+        <div id="routing-form"></div>
+        <div id="metrics-form"></div>
       </div>
       <div class="close-button"><i class="fa fa-times"></i></div>
     </div>
+
+    <script>
+    </script>
   </body>
+
 </html>
