@@ -27,6 +27,7 @@ function displayAggregates(obj, aggObj, displayHtml) {
   
   returnHtml += displayVariances(computePercentVariance(obj.perCapitaIncome, aggObj.avgPerCapitaIncome), "avgPerCapitaIncome")
 
+  console.log(returnHtml);
   return returnHtml;
   
 }
@@ -38,11 +39,11 @@ function computePercentVariance(objVal, aggVal) {
 function displayVariances(variance, metricName) {
 	if(variance < 0) {
 
-		return '<div id="'+ metricName + '" class="metricLessThan>"' + Math.abs(variance) + '</div>' 
+		return '<div id="'+ metricName + '" class="metricLessThan">' + Math.abs(variance) + '</div>' 
 
 	} else if( variance > 0){
-		return '<div id="'+ metricName + '" class="metricGreaterThan>"' + variance + '</div>' 
+		return '<div id="'+ metricName + '" class="metricGreaterThan">' + variance + '</div>' 
 	}
 
-	return '<div id="'+ metricName + '" class="metricEqual>"' + variance + '</div>' 
+	return '<div id="'+ metricName + '" class="metricEqual">' + variance + '</div>' 
 }
