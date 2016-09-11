@@ -80,12 +80,12 @@ jQuery.noConflict();
       console.log(censusAggregates);
     });
 
-    var crimeDict = {};
+    var crimeArr = [];
     var crimeUrl = 'https://data.cityofchicago.org/resource/vwwp-7yr9.json';
     $.get(crimeUrl, {}).done( function (obj) {
+      crimeArr = obj;
       for(var i = 0; i < obj.length; i++) {
         //console.log(obj[i]);
-        var returnObj = parseCrime(obj[i]);
       }
     });
 
@@ -125,6 +125,11 @@ jQuery.noConflict();
       dataHtml += '<div id="phone">Phone Number: ' + data.phoneNumber + '</div>';
       dataHtml += '<a id="zoom">Zoom To</a>';
 
+
+      //Crime Score
+      console.log("calculating crime");
+      calculateCrimeScoreInRange(data.lat, data.lon);
+
       var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
       var nDev = tallyNScore(censusObjDictionary[data.communityAreaNumber], censusAggregates);
       var nScore = 300 + nDev;
@@ -144,6 +149,9 @@ jQuery.noConflict();
       metricsHtml += '<h3>Crime Score: ' + cScore.toFixed(2) + ' (Baseline: 400)</h3><div class="well">' + '</div>';
       metricsHtml += '<h3>Misc. Score: ' + eScore.toFixed(2) + '</h3><div class="well">' + '</div>';
       $('#metrics-form').html(metricsHtml);
+
+
+
       // basically forcing a click event on housing button
       $('#housing-form').toggle(true);
       $('#routing-form').toggle(false);
@@ -364,6 +372,45 @@ jQuery.noConflict();
         script = document.createElement("script");
         script.src = routeUrl;
         document.body.appendChild(script);
+    }
+
+    var calculateCrimeScoreInRange = function(lat, lon)
+    {
+      
+      var localCrimeUrl = 'https://data.cityofchicago.org/resource/vwwp-7yr9.json';
+      var crimeQueryPrefixClause = '?$where=within_circle(location,%20';
+      var crimeQueryLatSuffix =   ',%20' ;
+      var crimeQueryLonSuffix = ',%202500)';
+      var finalCrimeQueryUrl = localCrimeUrl + crimeQueryPrefixClause + lat + crimeQueryLatSuffix + lon + crimeQueryLonSuffix
+
+      console.log(finalCrimeQueryUrl);
+      $.get(finalCrimeQueryUrl, {}).done( function (obj) {
+        localCrimeArr = obj;
+        var crimeScore = 0;
+        for(var i = 0; i < obj.length; i++) {
+          //console.log(obj[i]);
+          //console.log(i);
+          //console.log(obj[i].primary_type);
+          if(obj[i].primary_type == "HOMICIDE"){
+            crimeScore += 100;
+          } else if(obj[i].primary_type == "THEFT"){
+            crimeScore += 43;
+          } else if(obj[i].primary_type == "ROBBERY"){
+            crimeScore += 67;
+          } else if(obj[i].primary_type == "CRIMINAL DAMAGE"){
+            crimeScore += 41;
+          } else {
+            crimeScore += 22;
+          }
+
+        }
+        console.log(crimeScore / 100);
+
+      });
+
+    
+     
+      
     }
 
     /* DOM On Click Events */
