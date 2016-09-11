@@ -1,0 +1,5 @@
+{
+  "code" : "invalid_request",
+  "error" : true,
+  "message" : "The view was not included in the post for an INLINE method call"
+}

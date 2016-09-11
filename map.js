@@ -56,23 +56,7 @@ jQuery.noConflict();
       //console.log(housingObjArr);
     });
 
-    // create obj from raw housing xml
-    var parseHousing = function(entry) {
-      houseObj = {}
-      houseObj.communityArea = entry.find('community_area').text();
-      houseObj.communityAreaNumber = entry.find('community_area_number').text();
-      houseObj.propertyType = entry.find('property_type').text();
-      houseObj.propertyName = entry.find('property_name').text();
-      houseObj.address = entry.find('address').text();
-      houseObj.zipCode = entry.find('zip_code').text();
-      houseObj.phoneNumber = entry.find('phone_number').text();
-      houseObj.managementCompany = entry.find('management_company').text();
-      houseObj.xCoord = entry.find('x_coordinate').text();
-      houseObj.yCoord = entry.find('y_coordinate').text();
-      houseObj.lat = entry.find('latitude').text();
-      houseObj.lon = entry.find('longitude').text();
-      return houseObj;
-    }
+    
 
     var censusObjDictionary = {};
     var censusUrl = 'https://data.cityofchicago.org/api/views/kn9c-c2s2/rows.xml?accessType=DOWNLOAD'
@@ -85,8 +69,10 @@ jQuery.noConflict();
         var entry = $(this);
         var censusObj = parseCensus(entry);
         //TODO : addHousingMarker(housingObj);
-        censusObjDictionary[censusObj.communityAreaNumber] = censusObj
-        
+        if(censusObj.communityAreaNumber != null) {
+          censusObjDictionary[censusObj.communityAreaNumber] = censusObj
+        }
+
       });
       censusAggregates = computeAggregateCensusMetrics(censusObjDictionary)
       console.log(censusAggregates);
