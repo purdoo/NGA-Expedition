@@ -19,7 +19,8 @@ container {
   background-color: white;
   display:none;
   padding-bottom: 20px;
-  width: 35%;
+  width: 38%;
+  /*overflow-y: auto;*/
 }
 
 #metrics-form {
@@ -32,6 +33,8 @@ container {
 
 #routing-form-results {
   /*margin-top: 20px;*/
+  overflow-y: auto;
+  height: 600px;
 }
 
 /* Styling Buttons */

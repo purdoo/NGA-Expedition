@@ -123,10 +123,16 @@ jQuery.noConflict();
       var metricsData = displayAggregates(censusObjDictionary[data.communityAreaNumber], censusAggregates);
       //console.log(metricsData);
       $('#metrics-form').html(metricsData);
+      // basically forcing a click event on housing button
+      $('#housing-form').toggle(true);
       $('#routing-form').toggle(false);
       $('#metrics-form').toggle(false);
-
+      $('#housing-button').addClass('active');
+      $('#routing-button').removeClass('active');
+      $('#metrics-button').removeClass('active');
       $('#mapSidebar').toggle(true);
+      // clear potentially old search results
+      $('#routing-form-results').html('');
 
       // routing logic
       if(navigator.geolocation) {  
