@@ -51,7 +51,6 @@ jQuery.noConflict();
         var housingObj = parseHousing(entry);
         addHousingMarker(housingObj);
         housingObjArr.push(housingObj);
-        
       });
       //console.log(housingObjArr);
     });
