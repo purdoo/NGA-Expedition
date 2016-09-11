@@ -10,3 +10,7 @@ var getRouting = function() {
 function markLocation(location) {
   console.log(location);
 }
+
+function locationError(msg) {
+  console.log(msg);
+}
