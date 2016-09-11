@@ -18,4 +18,5 @@ container {
   z-index: 5;
   background-color: white;
   display:none;
+  padding-bottom: 20px;
 }

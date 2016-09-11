@@ -77,23 +77,6 @@ jQuery.noConflict();
       console.log(censusAggregates);
     });
 
-    // create obj from raw census data xml
-    var parseCensus = function(entry) {
-      censusObj = {}
-      if(entry.find('ca').text() != null) {
-        censusObj.communityArea = entry.find('community_area_name').text();
-        censusObj.communityAreaNumber = entry.find('ca').text();
-        censusObj.percentHousingCrowded = entry.find('percent_of_housing_crowded').text();
-        censusObj.percentHouseholdsBelowPoverty = entry.find('percent_households_below_poverty').text();
-        censusObj.percentAged16Unemployed = entry.find('percent_aged_16_unemployed').text();
-        censusObj.percentAged25NoDiploma = entry.find('percent_aged_25_without_high_school_diploma').text();
-        censusObj.percentAgedUnder18orOver64 = entry.find('percent_aged_under_18_or_over_64').text();
-        censusObj.perCapitaIncome = entry.find('per_capita_income_').text();
-        censusObj.hardshipIndex = entry.find('hardship_index').text();
-      }
-      
-      return censusObj;
-    }
 
     /* Drawing Functions */
 
@@ -126,6 +109,8 @@ jQuery.noConflict();
 
       $('#mapSidebar').html(dataHtml);
       $('#mapSidebar').toggle(true);
+
+    
       shapesUrl = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?additionaldata=IncludeShapeLevel%2Cdistrict&gen=8&jsonattributes=1&language=en-US&maxresults=20&mode=retrieveAddresses&prox=' + data.lat + '%2C' + data.lon + '%2C100&app_id=' + appId + '&app_code='+appCode;
       $.get(shapesUrl, {}).done( function (obj) {
         var polystrip = new H.geo.Strip();
