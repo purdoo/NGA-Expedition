@@ -10,7 +10,7 @@ jQuery.noConflict();
     var currLon = 0;
     var currLat = 0;
 
-    var isolineTime = 10;
+    var isolineTime = 8;
     // global scores
     var nScore = 300;
     var cScore = 0;
@@ -32,7 +32,7 @@ jQuery.noConflict();
     document.getElementById('mapContainer'),
     maptypes.normal.map,
     {
-      zoom: 11,
+      zoom: 12,
       center: { lng: -87.6405556, lat: 41.8822222 }
     });
 
@@ -460,6 +460,7 @@ jQuery.noConflict();
 
     // create rough crime score from housing location 
     var inferCrimeIndexFromHousing = function(obj) {
+      /*
       var crimeIndex = 50;
       var chiOriginLat = 41.8820586;
 
@@ -474,7 +475,8 @@ jQuery.noConflict();
       if(latDelta != 0){
         crimeIndex += factor * 5.3;
       }
-      return crimeIndex;
+      */
+      return Math.floor((Math.random() * 75) + 1);
     }
 
 
